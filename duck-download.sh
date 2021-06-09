@@ -15,8 +15,8 @@ operateFolder () {
 
   echo "Fetching items in \"$drivepath\" to \"$localpath\" as \"$username\"...\n"
 
-  # download files in this folder on background process
-  duck --parallel 8 -y -u "$username" --download "$drivepath*.*" "$localpath" &
+  # download files in this folder
+  duck --parallel 8 -y -u "$username" --download "$drivepath*.*" "$localpath"
   
   # get items -> remove color -> remove empty line -> reduce fields => handle each item
   duck -q -y -u "$username" -L "$drivepath" | sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})*)?m//g" | tail -n +2 | cut -f 1,4 | while read line; do
@@ -25,10 +25,12 @@ operateFolder () {
     if [ `echo $line | cut -b 1` = "d" ]; then # This item was a folder.
       #echo "Folder $name (skip)"
       # get items in the folder recursively
-      eval "$scriptpath" "\"$username\"" "\"$drivepath$name/\"" "\"$localpath$name/\"" &
+      eval "$scriptpath" "\"$username\"" "\"$drivepath$name/\"" "\"$localpath$name/\""
     #else # This item was a file.
       # download the file
       #duck -y -u "$username" --download "$drivepath$name" "$localpath"
+    else # There are no more folders under this folder.
+      exit 0
     fi
   done
 }
