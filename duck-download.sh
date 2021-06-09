@@ -13,7 +13,7 @@ operateFolder () {
     localpath="$localpath/"
   fi
 
-  echo "Fetching items in \"$drivepath\" to \"$localpath\" as \"$username\"...\n"
+  echo "\nFetching items in \"$drivepath\" to \"$localpath\" as \"$username\"...\n"
 
   # download files in this folder
   duck --parallel 8 -y -u "$username" --download "$drivepath*.*" "$localpath"
@@ -29,9 +29,9 @@ operateFolder () {
     #else # This item was a file.
       # download the file
       #duck -y -u "$username" --download "$drivepath$name" "$localpath"
-    else # There are no more folders under this folder.
-      exit 0
     fi
+    
+    exit 0
   done
 }
 
