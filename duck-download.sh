@@ -16,7 +16,7 @@ operateFolder () {
   echo "\nFetching items in \"$drivepath\" to \"$localpath\" as \"$username\"...\n"
 
   # download files in this folder
-  duck --parallel 8 -y -u "$username" --download "$drivepath*.*" "$localpath"
+  duck --parallel 8 -e overwrite -y -u "$username" --download "$drivepath*.*" "$localpath"
   
   # get items -> remove color -> remove empty line -> reduce fields => handle each item
   duck -q -y -u "$username" -L "$drivepath" | sed -r "s/\x1B\[([0-9]{1,2}(;[0-9]{1,2})*)?m//g" | tail -n +2 | cut -f 1,4 | while read line; do
@@ -30,9 +30,9 @@ operateFolder () {
       # download the file
       #duck -y -u "$username" --download "$drivepath$name" "$localpath"
     fi
-    
-    exit 0
   done
+    
+  exit 0
 }
 
 if [ $1 = "--help" -o $1 = "-h" ]; then
